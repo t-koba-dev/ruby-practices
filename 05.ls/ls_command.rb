@@ -75,7 +75,6 @@ def output_when_have_l_option(file_list, regex)
                                                                            ' ')} #{stat.mtime.hour.to_s.rjust(2,
                                                                                                               '0')}:#{stat.mtime.min.to_s.rjust(2, '0')} #{f}\n"
   end
-  exit
 end
 
 def push_file_that_matches_regular_expression(file_list, regex)
