@@ -101,8 +101,7 @@ def calculate_total(result_list)
   enqueue_file = []
   result_list.each { |f| enqueue_file << f if /^[^.]/.match?(f) }
   file_count = enqueue_file.inject(0) { |result, f| result + Pathname(f).stat.size }
-  total = file_count / 512
-  total += 1 unless (file_count % 512).zero?
+  file_count / 512
 end
 
 ARGV[0]&.chars&.uniq&.join
