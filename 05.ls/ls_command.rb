@@ -65,8 +65,8 @@ def output_when_have_l_option(file_list, regex)
   puts "total #{calculate_total(result_list)}"
   result_list.each do |f|
     stat = Pathname(f).stat
-    print "#{stat.mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{display_permission(f)}"
-    print "#{f == '..' ? '@ ' : '  '}#{stat.nlink.to_s.rjust(word_max_length[:max_nlink])} "
+    print "#{stat.mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{display_permission(f)}  "
+    print "#{stat.nlink.to_s.rjust(word_max_length[:max_nlink])} "
     print "#{Etc.getpwuid(stat.uid).name.to_s.rjust(word_max_length[:max_uid_name])}  "
     print "#{Etc.getgrgid(stat.gid).name.to_s.rjust(word_max_length[:max_gid_name])}  "
     print "#{stat.size.to_s.rjust(word_max_length[:max_size])} "
