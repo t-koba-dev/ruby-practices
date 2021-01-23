@@ -23,13 +23,7 @@ def push_shos_to_frames(score)
 end
 
 def push_when_frame10(scores, index, shots)
-  scores[index..-1].each do |i|
-    shots << if i == 'X'
-               10
-             else
-               i.to_i
-             end
-  end
+  scores[index..-1].each { |i| shots << (i == 'X' ? 10 : i.to_i) }
 end
 
 def push_when_others(score, shots, frames)
