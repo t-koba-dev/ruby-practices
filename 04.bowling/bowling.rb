@@ -43,17 +43,21 @@ def calculate(score)
   frames.each_with_index do |shots, index|
     point += shots.sum
     if shots[0] == 10 && ((index + 1) != 10) # strike
-      point += if (frames[index + 1][0] == 10) && ((index + 1) < 9)
-                 10 + frames[index + 2][0]
-               else
-                 frames[index + 1][0..1].sum
-               end
+      point += calculate_when_strike(frames, index)
     elsif shots.sum == 10 && ((index + 1) != 10) # spare
       point += frames[index + 1][0]
     end
   end
 
   point
+end
+
+def calculate_when_strike(frames, index)
+  if (frames[index + 1][0] == 10) && ((index + 1) < 9)
+    10 + frames[index + 2][0]
+  else
+    frames[index + 1][0..1].sum
+  end
 end
 
 score = ARGV[0]
