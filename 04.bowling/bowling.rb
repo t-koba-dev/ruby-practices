@@ -8,7 +8,7 @@ def push_shos_to_frames(score)
   scores.each_with_index do |s, index|
     if frames.size == 9
       push_when_frame10(scores, index, shots)
-      frames.push(shots.map { |n| n })
+      frames.push(shots)
       break
     else
       push_when_others(s, shots, frames)
