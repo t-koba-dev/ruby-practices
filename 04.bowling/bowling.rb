@@ -41,23 +41,24 @@ def calculate(score)
   frames = push_shos_to_frames(score)
   point = 0
 
-  frames.each_with_index do |shots, number_of_frames_minus1|
+  frames.each_with_index do |shots, index|
+    number_of_frames = index + 1
     point += shots.sum
-    if shots[0] == 10 && ((number_of_frames_minus1 + 1) != 10) # strike
-      point += calculate_when_strike(frames, number_of_frames_minus1)
-    elsif shots.sum == 10 && ((number_of_frames_minus1 + 1) != 10) # spare
-      point += frames[number_of_frames_minus1 + 1][0]
+    if shots[0] == 10 && (number_of_frames != 10) # strike
+      point += calculate_when_strike(frames, number_of_frames)
+    elsif shots.sum == 10 && (number_of_frames != 10) # spare
+      point += frames[number_of_frames][0]
     end
   end
 
   point
 end
 
-def calculate_when_strike(frames, number_of_frames_minus1)
-  if (frames[number_of_frames_minus1 + 1][0] == 10) && ((number_of_frames_minus1 + 1) < 9)
-    10 + frames[number_of_frames_minus1 + 2][0]
+def calculate_when_strike(frames, number_of_frames)
+  if (frames[number_of_frames][0] == 10) && (number_of_frames < 9)
+    10 + frames[number_of_frames + 1][0]
   else
-    frames[number_of_frames_minus1 + 1][0..1].sum
+    frames[number_of_frames][0..1].sum
   end
 end
 
