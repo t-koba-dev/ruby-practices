@@ -5,9 +5,10 @@ def push_shos_to_frames(score)
   frames = []
   shots = []
 
-  scores.each_with_index do |s, number_of_shots_minus1|
+  scores.each_with_index do |s, index|
+    number_of_shots = index + 1
     if frames.size == 9
-      push_when_frame10(scores, number_of_shots_minus1, shots)
+      push_when_frame10(scores, number_of_shots, shots)
       frames.push(shots)
       break
     else
@@ -22,8 +23,8 @@ def push_shos_to_frames(score)
   frames
 end
 
-def push_when_frame10(scores, number_of_shots_minus1, shots)
-  scores[number_of_shots_minus1..-1].each { |i| shots << (i == 'X' ? 10 : i.to_i) }
+def push_when_frame10(scores, number_of_shots, shots)
+  scores[(number_of_shots - 1)..-1].each { |i| shots << (i == 'X' ? 10 : i.to_i) }
 end
 
 def push_when_others(score, shots, frames)
