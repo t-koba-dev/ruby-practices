@@ -13,7 +13,7 @@ def push_shos_to_frames(score)
     else
       push_when_others(s, shots, frames)
       if shots.size == 2
-        frames.push(shots.map { |n| n })
+        frames.push(shots.dup)
         shots.clear
       end
     end
