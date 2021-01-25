@@ -78,14 +78,10 @@ end
 
 def calculate_word_max_length(result_list)
   word_max_length = {}
-  word_max_length.default = 0
-  result_list.map do |file|
-    stat = Pathname(file).stat
-    word_max_length[:max_nlink] = stat.nlink.to_s.size if word_max_length[:max_nlink] < stat.nlink.to_s.size
-    word_max_length[:max_uid_name] = Etc.getpwuid(stat.uid).name.to_s.size if word_max_length[:max_uid_name] < Etc.getpwuid(stat.uid).name.to_s.size
-    word_max_length[:max_gid_name] = Etc.getgrgid(stat.gid).name.to_s.size if word_max_length[:max_gid_name] < Etc.getgrgid(stat.gid).name.to_s.size
-    word_max_length[:max_size] = stat.size.to_s.size if word_max_length[:max_size] < stat.size.to_s.size
-  end
+  word_max_length[:max_nlink] = Pathname(result_list.max_by { |file| Pathname(file).stat.nlink.to_s.size }).stat.nlink.to_s.size
+  word_max_length[:max_uid_name] = Etc.getpwuid(Pathname(result_list.max_by { |file| Etc.getpwuid(Pathname(file).stat.uid).name.to_s.size }).stat.uid).name.size
+  word_max_length[:max_gid_name] = Etc.getgrgid(Pathname(result_list.max_by { |file| Etc.getgrgid(Pathname(file).stat.gid).name.to_s.size }).stat.gid).name.size
+  word_max_length[:max_size] = Pathname(result_list.max_by { |file| Pathname(file).stat.size.to_s.size }).stat.size.to_s.size
   word_max_length
 end
 
