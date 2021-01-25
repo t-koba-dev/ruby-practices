@@ -73,9 +73,7 @@ def output_when_have_l_option(file_list, regex)
 end
 
 def push_file_that_matches_regular_expression(file_list, regex)
-  result_list = []
-  file_list.each { |f| result_list << f if f&.match?(regex) }
-  result_list
+  file_list.select { |file| file.match?(regex) }
 end
 
 def calculate_word_max_length(result_list)
