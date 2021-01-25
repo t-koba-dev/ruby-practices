@@ -70,10 +70,8 @@ def output_when_have_l_option(file_list, regex)
     print "#{Etc.getpwuid(stat.uid).name.to_s.rjust(word_max_length[:max_uid_name])}  "
     print "#{Etc.getgrgid(stat.gid).name.to_s.rjust(word_max_length[:max_gid_name])}  "
     print "#{stat.size.to_s.rjust(word_max_length[:max_size])} "
-    print "#{stat.mtime.month.to_s.rjust(2,
-                                         ' ')} #{stat.mtime.day.to_s.rjust(2,
-                                                                           ' ')} #{stat.mtime.hour.to_s.rjust(2,
-                                                                                                              '0')}:#{stat.mtime.min.to_s.rjust(2, '0')} #{f}\n"
+    print "#{stat.mtime.month.to_s.rjust(2, ' ')} #{stat.mtime.day.to_s.rjust(2, ' ')} "
+    print "#{stat.mtime.hour.to_s.rjust(2, '0')}:#{stat.mtime.min.to_s.rjust(2, '0')} #{f}\n"
   end
 end
 
