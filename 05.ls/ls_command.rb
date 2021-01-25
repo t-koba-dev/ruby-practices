@@ -103,5 +103,4 @@ def calculate_total(result_list)
   file_count / 512
 end
 
-ARGV[0]&.chars&.uniq&.join
 output
