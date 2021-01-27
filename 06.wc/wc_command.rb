@@ -48,7 +48,7 @@ def calculate(file_list)
 end
 
 def output_total(file_list)
-  total = Hash.new { |_n| 0 }
+  total = Hash.new(0)
   file_list.each do |f|
     total[:lines] += IO.readlines(f).size
     unless ARGV.include?('-l')
