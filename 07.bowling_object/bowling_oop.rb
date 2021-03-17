@@ -23,47 +23,6 @@ class Frame
     @third_shot = Shot.new(third_mark)
   end
 
-  def score(frames)
-    point = @first_shot.score + @second_shot.score + @third_shot.score
-    if @first_shot.score == 10
-      point += calculate_when_strike(frames)
-    elsif @first_shot.score + @second_shot.score == 10
-      point += frames[frames.index(self) + 1].first_shot.score
-    end
-    point
-  end
-
-  def score_when_last_frame
-    @first_shot.score + @second_shot.score + @third_shot.score
-  end
-
-  def calculate_when_strike(frames)
-    if (frames[frames.index(self) + 1].first_shot.score == 10) && (frames.index(self) < 8)
-      10 + frames[frames.index(self) + 2].first_shot.score
-    else
-      frames[frames.index(self) + 1].first_shot.score + frames[frames.index(self) + 1].second_shot.score
-    end
-  end
-end
-
-class Game
-  attr_reader :scores
-
-  def initialize(scores)
-    @scores = scores
-  end
-
-  def score
-    frames = AddShotsToFrame.push_shots_to_frames(scores)
-    point = 0
-    9.times do |frame|
-      point += frames[frame].score(frames)
-    end
-    point += frames.last.score_when_last_frame
-  end
-end
-
-class AddShotsToFrame
   def self.push_shots_to_frames(scores)
     frames = []
     shots = []
@@ -95,6 +54,45 @@ class AddShotsToFrame
     else
       shots << Shot.new(shot).score
     end
+  end
+
+  def score(frames)
+    point = @first_shot.score + @second_shot.score + @third_shot.score
+    if @first_shot.score == 10
+      point += calculate_when_strike(frames)
+    elsif @first_shot.score + @second_shot.score == 10
+      point += frames[frames.index(self) + 1].first_shot.score
+    end
+    point
+  end
+
+  def score_when_last_frame
+    @first_shot.score + @second_shot.score + @third_shot.score
+  end
+
+  def calculate_when_strike(frames)
+    if (frames[frames.index(self) + 1].first_shot.score == 10) && (frames.index(self) < 8)
+      10 + frames[frames.index(self) + 2].first_shot.score
+    else
+      frames[frames.index(self) + 1].first_shot.score + frames[frames.index(self) + 1].second_shot.score
+    end
+  end
+end
+
+class Game
+  attr_reader :scores
+
+  def initialize(scores)
+    @scores = scores
+  end
+
+  def score
+    frames = Frame.push_shots_to_frames(scores)
+    point = 0
+    9.times do |frame|
+      point += frames[frame].score(frames)
+    end
+    point += frames.last.score_when_last_frame
   end
 end
 
