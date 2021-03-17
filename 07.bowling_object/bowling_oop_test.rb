@@ -4,7 +4,7 @@ require 'minitest/autorun'
 require './07.bowling_object/bowling_oop'
 
 # bowling_oop.rbの以下の行をコメントアウトしてからテストを実行する(score = ARGV[0] よりscoreがnilとなってしまうため)
-# p calculate(score)
+# p Game.new(scores).score
 
 class BowlingOopTest < Minitest::Test
   def test_case1
