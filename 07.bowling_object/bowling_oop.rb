@@ -28,7 +28,7 @@ class Frame
   end
 end
 
-def Game
+class Game
   attr_reader :scores
 
   def initialize(scores)
@@ -36,7 +36,7 @@ def Game
   end
 
   def score
-    # to do
+    calculate(scores)
   end
 end
 
@@ -106,4 +106,4 @@ end
 
 scores = ARGV[0]&.split(',')
 
-p calculate(scores)
+p Game.new(scores).score
