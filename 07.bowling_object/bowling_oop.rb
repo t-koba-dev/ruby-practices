@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-def push_shos_to_frames(score)
+def push_shots_to_frames(score)
   scores = score.split(',')
   frames = []
   shots = []
@@ -38,7 +38,7 @@ def push_when_others(score, shots, frames)
 end
 
 def calculate(score)
-  frames = push_shos_to_frames(score)
+  frames = push_shots_to_frames(score)
   point = 0
 
   frames.each_with_index do |shots, index|
