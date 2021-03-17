@@ -14,6 +14,32 @@ class Shot
   end
 end
 
+class Frame
+  attr_reader :first_shot, :second_shot, :third_shot
+
+  def initialize(first_mark, second_mark, third_mark = nil)
+    @first_shot = Shot.new(first_mark)
+    @second_shot = Shot.new(second_mark)
+    @third_shot = Shot.new(third_mark)
+  end
+
+  def score
+    # to do
+  end
+end
+
+def Game
+  attr_reader :scores
+
+  def initialize(scores)
+    @scores = scores
+  end
+
+  def score
+    # to do
+  end
+end
+
 
 def push_shots_to_frames(score)
   scores = score.split(',')
