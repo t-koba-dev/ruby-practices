@@ -9,7 +9,6 @@ class Shot
 
   def score
     return 10 if mark == 'X'
-
     mark.to_i
   end
 end
@@ -23,8 +22,26 @@ class Frame
     @third_shot = Shot.new(third_mark)
   end
 
-  def score
-    # to do
+  def score(frames)
+    point = @first_shot.score + @second_shot.score + @third_shot.score
+    if @first_shot.score == 10
+      point += calculate_when_strike(frames)
+    elsif @first_shot.score + @second_shot.score == 10
+      point += frames[frames.find_index(self) + 1].first_shot.score
+    end
+    point
+  end
+
+  def score_when_last_frame
+    point = @first_shot.score + @second_shot.score + @third_shot.score
+  end
+
+  def calculate_when_strike(frames)
+    if (frames[frames.find_index(self) + 1].first_shot.score == 10) && (frames.find_index(self) < 8)
+      10 + frames[frames.find_index(self) + 2].first_shot.score
+    else
+      frames[frames.find_index(self) + 1].first_shot.score + frames[frames.find_index(self) + 1].second_shot.score
+    end
   end
 end
 
@@ -35,73 +52,47 @@ class Game
     @scores = scores
   end
 
-  def score
-    calculate(scores)
-  end
-end
-
-
-def push_shots_to_frames(scores)
-  frames = []
-  shots = []
-
-  scores.each_with_index do |s, index|
-    number_of_shots = index + 1
-    if frames.size == 9
-      push_when_frame10(scores, number_of_shots, shots)
-      frames.push(shots)
-      break
-    else
-      push_when_others(s, shots, frames)
-      if shots.size == 2
-        frames.push(shots.dup)
-        shots.clear
+  def push_shots_to_frames
+    frames = []
+    shots = []
+    scores.each_with_index do |shot, index|
+      number_of_shots = index + 1
+      if frames.size == 9
+        push_when_frame10(number_of_shots, shots)
+        frames.push(Frame.new(shots[0], shots[1], shots[2]))
+        break
+      else
+        push_when_others(shot, shots, frames)
+        if shots.size == 2
+          frames.push(Frame.new(shots.dup[0], shots.dup[1]))
+          shots.clear
+        end
       end
     end
+
+    frames
   end
 
-  frames
-end
-
-def push_when_frame10(scores, number_of_shots, shots)
-  scores[(number_of_shots - 1)..-1].each { |i| shots << Shot.new(i).score }
-end
-
-def push_when_others(score, shots, frames)
-  if shots.size.zero? && (score == 'X') # strike
-    frames.push([10, 0])
-  else
-    shots << Shot.new(score).score
+  def push_when_frame10(number_of_shots, shots)
+    scores[(number_of_shots - 1)..-1].each { |i| shots << Shot.new(i).score }
   end
-end
 
-def calculate(score)
-  frames = push_shots_to_frames(score)
-  point = 0
-
-  frames.each_with_index do |shots, index|
-    number_of_frames = index + 1
-    point += shots.sum
-    if shots[0] == 10 && !the_10th_frame?(number_of_frames) # strike
-      point += calculate_when_strike(frames, number_of_frames)
-    elsif shots.sum == 10 && !the_10th_frame?(number_of_frames) # spare
-      point += frames[number_of_frames][0]
+  def push_when_others(score, shots, frames)
+    if shots.size.zero? && (score == 'X') # strike
+      frames.push(Frame.new(10, 0))
+    else
+      shots << Shot.new(score).score
     end
   end
 
-  point
-end
-
-def calculate_when_strike(frames, number_of_frames)
-  if (frames[number_of_frames][0] == 10) && (number_of_frames < 9)
-    10 + frames[number_of_frames + 1][0]
-  else
-    frames[number_of_frames][0..1].sum
+  def score
+    frames = push_shots_to_frames
+    point = 0
+    9.times do |frame|
+      point += frames[frame].score(frames)
+    end
+    point += frames.last.score_when_last_frame
   end
-end
-
-def the_10th_frame?(number_of_frames)
-  number_of_frames == 10
 end
 
 scores = ARGV[0]&.split(',')
