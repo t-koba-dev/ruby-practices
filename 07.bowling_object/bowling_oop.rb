@@ -88,11 +88,11 @@ class AddShotsToFrame
     scores[(number_of_shots - 1)..-1].each { |i| shots << Shot.new(i).score }
   end
 
-  def self.push_when_others(score, shots, frames)
-    if shots.size.zero? && (score == 'X') # strike
+  def self.push_when_others(shot, shots, frames)
+    if shots.size.zero? && (shot == 'X') # strike
       frames.push(Frame.new(10, 0))
     else
-      shots << Shot.new(score).score
+      shots << Shot.new(shot).score
     end
   end
 end
