@@ -9,6 +9,7 @@ class Shot
 
   def score
     return 10 if mark == 'X'
+
     mark.to_i
   end
 end
@@ -33,7 +34,7 @@ class Frame
   end
 
   def score_when_last_frame
-    point = @first_shot.score + @second_shot.score + @third_shot.score
+    @first_shot.score + @second_shot.score + @third_shot.score
   end
 
   def calculate_when_strike(frames)
