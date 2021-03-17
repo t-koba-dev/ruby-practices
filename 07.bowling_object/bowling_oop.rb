@@ -1,5 +1,20 @@
 # frozen_string_literal: true
 
+class Shot
+  attr_reader :mark
+
+  def initialize(mark)
+    @mark = mark
+  end
+
+  def score
+    return 10 if mark == 'X'
+
+    mark.to_i
+  end
+end
+
+
 def push_shots_to_frames(score)
   scores = score.split(',')
   frames = []
@@ -24,16 +39,14 @@ def push_shots_to_frames(score)
 end
 
 def push_when_frame10(scores, number_of_shots, shots)
-  scores[(number_of_shots - 1)..-1].each { |i| shots << (i == 'X' ? 10 : i.to_i) }
+  scores[(number_of_shots - 1)..-1].each { |i| shots << Shot.new(i).score }
 end
 
 def push_when_others(score, shots, frames)
   if shots.size.zero? && (score == 'X') # strike
     frames.push([10, 0])
-  elsif score == 'X' # spare
-    shots << 10
   else
-    shots << score.to_i
+    shots << Shot.new(score).score
   end
 end
 
