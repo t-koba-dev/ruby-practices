@@ -75,7 +75,7 @@ class AddShotsToFrame
       else
         push_when_others(shot, shots, frames)
         if shots.size == 2
-          frames.push(Frame.new(shots.dup[0], shots.dup[1]))
+          frames.push(Frame.new(shots[0], shots[1]))
           shots.clear
         end
       end
