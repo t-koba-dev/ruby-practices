@@ -41,8 +41,7 @@ def Game
 end
 
 
-def push_shots_to_frames(score)
-  scores = score.split(',')
+def push_shots_to_frames(scores)
   frames = []
   shots = []
 
@@ -105,6 +104,6 @@ def the_10th_frame?(number_of_frames)
   number_of_frames == 10
 end
 
-score = ARGV[0]
+scores = ARGV[0]&.split(',')
 
-p calculate(score)
+p calculate(scores)
