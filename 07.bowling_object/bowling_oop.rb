@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 def push_shos_to_frames(score)
-  scores = score.chars
+  scores = score.split(',')
   frames = []
   shots = []
 
