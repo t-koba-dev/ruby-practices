@@ -28,9 +28,9 @@ def push_when_frame10(scores, number_of_shots, shots)
 end
 
 def push_when_others(score, shots, frames)
-  if shots.size.zero? && (score == 'X')
+  if shots.size.zero? && (score == 'X') # strike
     frames.push([10, 0])
-  elsif score == 'X'
+  elsif score == 'X' # spare
     shots << 10
   else
     shots << score.to_i
