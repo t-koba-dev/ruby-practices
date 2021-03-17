@@ -27,7 +27,7 @@ class Frame
     if @first_shot.score == 10
       point += calculate_when_strike(frames)
     elsif @first_shot.score + @second_shot.score == 10
-      point += frames[frames.find_index(self) + 1].first_shot.score
+      point += frames[frames.index(self) + 1].first_shot.score
     end
     point
   end
@@ -37,10 +37,10 @@ class Frame
   end
 
   def calculate_when_strike(frames)
-    if (frames[frames.find_index(self) + 1].first_shot.score == 10) && (frames.find_index(self) < 8)
-      10 + frames[frames.find_index(self) + 2].first_shot.score
+    if (frames[frames.index(self) + 1].first_shot.score == 10) && (frames.index(self) < 8)
+      10 + frames[frames.index(self) + 2].first_shot.score
     else
-      frames[frames.find_index(self) + 1].first_shot.score + frames[frames.find_index(self) + 1].second_shot.score
+      frames[frames.index(self) + 1].first_shot.score + frames[frames.index(self) + 1].second_shot.score
     end
   end
 end
