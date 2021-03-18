@@ -23,7 +23,16 @@ end
 
 def push_file_to_list
   file_list = []
-  Find.find('.') { |f| file_list << (f == '.' ? f : f.slice(2..-1)) }
+  regex = /.*\/+.*/
+  Find.find('.') do |f|
+    if f == '.'
+      file_list << f
+      next
+    end
+    unless f.slice(2..-1).match?(regex)
+      file_list << f.slice(2..-1)
+    end
+  end
   Find.find('..') do |f|
     file_list << f
     Find.prune
