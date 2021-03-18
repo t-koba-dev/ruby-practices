@@ -67,8 +67,8 @@ end
 
 def output_when_have_l_option(file_list, regex)
   result_list = push_file_that_matches_regular_expression(file_list, regex)
-  word_max_length = calculate_word_max_length(result_list)
-  puts "total #{calculate_total(result_list)}"
+  word_max_length = Calculation.calculate_word_max_length(result_list)
+  puts "total #{Calculation.calculate_total(result_list)}"
   result_list.each do |f|
     stat = Pathname(f).stat
     print "#{stat.mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{display_permission(f)}  "
@@ -85,20 +85,23 @@ def push_file_that_matches_regular_expression(file_list, regex)
   file_list.select { |file| file.match?(regex) }
 end
 
-def calculate_word_max_length(result_list)
-  word_max_length = {}
-  word_max_length[:max_nlink] = Pathname(result_list.max_by { |file| Pathname(file).stat.nlink.to_s.size }).stat.nlink.to_s.size
-  word_max_length[:max_uid_name] = Etc.getpwuid(Pathname(result_list.max_by { |file| Etc.getpwuid(Pathname(file).stat.uid).name.to_s.size }).stat.uid).name.size
-  word_max_length[:max_gid_name] = Etc.getgrgid(Pathname(result_list.max_by { |file| Etc.getgrgid(Pathname(file).stat.gid).name.to_s.size }).stat.gid).name.size
-  word_max_length[:max_size] = Pathname(result_list.max_by { |file| Pathname(file).stat.size.to_s.size }).stat.size.to_s.size
-  word_max_length
-end
+class Calculation
+  def self.calculate_word_max_length(result_list)
+    word_max_length = {}
+    word_max_length[:max_nlink] = Pathname(result_list.max_by { |file| Pathname(file).stat.nlink.to_s.size }).stat.nlink.to_s.size
+    word_max_length[:max_uid_name] = Etc.getpwuid(Pathname(result_list.max_by { |file| Etc.getpwuid(Pathname(file).stat.uid).name.to_s.size }).stat.uid).name.size
+    word_max_length[:max_gid_name] = Etc.getgrgid(Pathname(result_list.max_by { |file| Etc.getgrgid(Pathname(file).stat.gid).name.to_s.size }).stat.gid).name.size
+    word_max_length[:max_size] = Pathname(result_list.max_by { |file| Pathname(file).stat.size.to_s.size }).stat.size.to_s.size
+    word_max_length
+  end
 
-def calculate_total(result_list)
-  enqueue_file = []
-  result_list.each { |f| enqueue_file << f if /^[^.]/.match?(f) }
-  file_count = enqueue_file.inject(0) { |result, f| result + Pathname(f).stat.size }
-  file_count / 512
+  def self.calculate_total(result_list)
+    enqueue_file = []
+    result_list.each { |f| enqueue_file << f if /^[^.]/.match?(f) }
+    file_count = enqueue_file.inject(0) { |result, f| result + Pathname(f).stat.size }
+    file_count / 512
+    # TO DO file_countの値を正しく表示する
+  end
 end
 
 output
