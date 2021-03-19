@@ -22,6 +22,22 @@ class File
     @minute = stat.mtime.min
     @name = file
   end
+
+  def output_permission
+    "#{@mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{@permission}  "
+  end
+
+  def output_month_and_day
+    "#{@month.to_s.rjust(2, ' ')} #{@day.to_s.rjust(2, ' ')} "
+  end
+
+  def output_hour_and_minute
+    "#{@hour.to_s.rjust(2, '0')}:#{@minute.to_s.rjust(2, '0')} "
+  end
+
+  def output_name
+    "#{@name}\n"
+  end
 end
 
 def display_permission(file)
@@ -90,13 +106,14 @@ def output_when_have_l_option(file_list, regex)
   puts "total #{Calculation.calculate_total(result_list)}"
   result_list.each do |f|
     file = File.new(f)
-    print "#{file.mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{file.permission}  "
+    print file.output_permission
     print "#{file.nlink.to_s.rjust(word_max_length[:max_nlink])} "
     print "#{file.uid.to_s.rjust(word_max_length[:max_uid_name])}  "
     print "#{file.gid.to_s.rjust(word_max_length[:max_gid_name])}  "
     print "#{file.size.to_s.rjust(word_max_length[:max_size])} "
-    print "#{file.month.to_s.rjust(2, ' ')} #{file.day.to_s.rjust(2, ' ')} "
-    print "#{file.hour.to_s.rjust(2, '0')}:#{file.minute.to_s.rjust(2, '0')} #{file.name}\n"
+    print file.output_month_and_day
+    print file.output_hour_and_minute
+    print file.output_name
   end
 end
 
