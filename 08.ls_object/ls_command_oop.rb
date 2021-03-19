@@ -5,6 +5,25 @@ require 'pathname'
 require 'etc'
 require 'date'
 
+class File
+  attr_reader :mode, :permission, :nlink, :uid, :gid, :size, :month, :day, :hour, :minute, :name
+
+  def initialize(file)
+    stat = Pathname(file).stat
+    @mode = stat.mode
+    @permission = display_permission(file)
+    @nlink = stat.nlink
+    @uid = Etc.getpwuid(stat.uid).name
+    @gid = Etc.getgrgid(stat.gid).name
+    @size = stat.size
+    @month = stat.mtime.month
+    @day = stat.mtime.day
+    @hour = stat.mtime.hour
+    @minute = stat.mtime.min
+    @name = file
+  end
+end
+
 def display_permission(file)
   Pathname(file).stat.mode.to_s(8).slice(-3..-1).chars.inject('') { |result, str| result + encode_permission(str) }
 end
@@ -70,14 +89,14 @@ def output_when_have_l_option(file_list, regex)
   word_max_length = Calculation.calculate_word_max_length(result_list)
   puts "total #{Calculation.calculate_total(result_list)}"
   result_list.each do |f|
-    stat = Pathname(f).stat
-    print "#{stat.mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{display_permission(f)}  "
-    print "#{stat.nlink.to_s.rjust(word_max_length[:max_nlink])} "
-    print "#{Etc.getpwuid(stat.uid).name.to_s.rjust(word_max_length[:max_uid_name])}  "
-    print "#{Etc.getgrgid(stat.gid).name.to_s.rjust(word_max_length[:max_gid_name])}  "
-    print "#{stat.size.to_s.rjust(word_max_length[:max_size])} "
-    print "#{stat.mtime.month.to_s.rjust(2, ' ')} #{stat.mtime.day.to_s.rjust(2, ' ')} "
-    print "#{stat.mtime.hour.to_s.rjust(2, '0')}:#{stat.mtime.min.to_s.rjust(2, '0')} #{f}\n"
+    file = File.new(f)
+    print "#{file.mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{file.permission}  "
+    print "#{file.nlink.to_s.rjust(word_max_length[:max_nlink])} "
+    print "#{file.uid.to_s.rjust(word_max_length[:max_uid_name])}  "
+    print "#{file.gid.to_s.rjust(word_max_length[:max_gid_name])}  "
+    print "#{file.size.to_s.rjust(word_max_length[:max_size])} "
+    print "#{file.month.to_s.rjust(2, ' ')} #{file.day.to_s.rjust(2, ' ')} "
+    print "#{file.hour.to_s.rjust(2, '0')}:#{file.minute.to_s.rjust(2, '0')} #{file.name}\n"
   end
 end
 
