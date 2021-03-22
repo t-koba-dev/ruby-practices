@@ -16,9 +16,9 @@ class Game
     9.times do |frame|
       point += frames[frame].score
       if frames[frame].first_shot.score == 10
-        point += self.calculate_when_strike(frames, frame)
+        point += calculate_when_strike(frames, frame)
       elsif frames[frame].score == 10
-        point += self.caluclate_when_spare(frames, frame)
+        point += caluclate_when_spare(frames, frame)
       end
     end
     point += score_when_last_frame(frames)

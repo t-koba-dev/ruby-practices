@@ -10,6 +10,6 @@ class Frame
   end
 
   def score
-    point = @first_shot.score + @second_shot.score + @third_shot.score
+    @first_shot.score + @second_shot.score + @third_shot.score
   end
 end
