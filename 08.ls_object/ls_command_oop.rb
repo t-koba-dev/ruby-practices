@@ -54,6 +54,17 @@ class File
   def output_name
     "#{@name}\n"
   end
+
+  def self.output
+    file_list = List.push_file_to_list
+    file_list = file_list.reverse if ARGV[0]&.include?('r')
+    regex = (ARGV[0]&.include?('a') ? // : /^[^.]/)
+    if ARGV[0]&.include?('l')
+      OptionCommand.output_when_have_l_option(file_list, regex)
+    else
+      OptionCommand.output_when_have_not_l_option(file_list, regex)
+    end
+  end
 end
 
 class Permission
@@ -90,17 +101,6 @@ class List
       Find.prune
     end
     file_list.sort
-  end
-end
-
-def output
-  file_list = List.push_file_to_list
-  file_list = file_list.reverse if ARGV[0]&.include?('r')
-  regex = (ARGV[0]&.include?('a') ? // : /^[^.]/)
-  if ARGV[0]&.include?('l')
-    OptionCommand.output_when_have_l_option(file_list, regex)
-  else
-    OptionCommand.output_when_have_not_l_option(file_list, regex)
   end
 end
 
@@ -160,4 +160,4 @@ class Calculation
   end
 end
 
-output
+File.output
