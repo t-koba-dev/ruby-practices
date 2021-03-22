@@ -27,6 +27,22 @@ class File
     "#{@mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{@permission}  "
   end
 
+  def output_nlink(max_nlink)
+    "#{@nlink.to_s.rjust(max_nlink)} "
+  end
+
+  def output_uid(max_uid_name)
+    "#{@uid.to_s.rjust(max_uid_name)}  "
+  end
+
+  def output_gid(max_gid_name)
+    "#{@gid.to_s.rjust(max_gid_name)}  "
+  end
+
+  def output_size(max_size)
+    "#{@size.to_s.rjust(max_size)} "
+  end
+
   def output_month_and_day
     "#{@month.to_s.rjust(2, ' ')} #{@day.to_s.rjust(2, ' ')} "
   end
@@ -107,10 +123,10 @@ def output_when_have_l_option(file_list, regex)
   result_list.each do |f|
     file = File.new(f)
     print file.output_permission
-    print "#{file.nlink.to_s.rjust(word_max_length[:max_nlink])} "
-    print "#{file.uid.to_s.rjust(word_max_length[:max_uid_name])}  "
-    print "#{file.gid.to_s.rjust(word_max_length[:max_gid_name])}  "
-    print "#{file.size.to_s.rjust(word_max_length[:max_size])} "
+    print file.output_nlink(word_max_length[:max_nlink])
+    print file.output_uid(word_max_length[:max_uid_name])
+    print file.output_gid(word_max_length[:max_gid_name])
+    print file.output_size(word_max_length[:max_size])
     print file.output_month_and_day
     print file.output_hour_and_minute
     print file.output_name
