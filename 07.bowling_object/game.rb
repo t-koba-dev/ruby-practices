@@ -16,5 +16,3 @@ class Game
     point += frames.last.score_when_last_frame
   end
 end
-
-scores = ARGV[0]&.split(',')
