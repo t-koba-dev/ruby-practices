@@ -3,9 +3,6 @@
 require 'minitest/autorun'
 require './07.bowling_object/bowling_oop'
 
-# bowling_oop.rbの以下の行をコメントアウトしてからテストを実行する(score = ARGV[0] よりscoreがnilとなってしまうため)
-# p Game.new(scores).score
-
 class BowlingOopTest < Minitest::Test
   def test_case1
     scores = '6,3,9,0,0,3,8,2,7,3,X,9,1,8,0,X,6,4,5'.split(',')
