@@ -158,9 +158,7 @@ class Calculation
   def self.calculate_total(result_list)
     enqueue_file = []
     result_list.each { |f| enqueue_file << f if /^[^.]/.match?(f) }
-    file_count = enqueue_file.inject(0) { |result, f| result + Pathname(f).stat.size }
-    file_count / 512
-    # TO DO file_countの値を正しく表示する
+    file_count = enqueue_file.inject(0) { |result, f| result + 8 * ((Pathname(f).stat.size)/4096 + 1 ) }
   end
 end
 
