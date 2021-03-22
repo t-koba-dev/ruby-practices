@@ -16,7 +16,7 @@ class Game
     9.times do |frame|
       point += frames[frame].score(frames)
     end
-    point += frames.last.score_when_last_frame
+    point += score_when_last_frame(frames)
   end
 
   private
@@ -52,5 +52,9 @@ class Game
     else
       shots << Shot.new(shot).score
     end
+  end
+
+  def score_when_last_frame(frames)
+    frames.last.first_shot.score + frames.last.second_shot.score + frames.last.third_shot.score
   end
 end

@@ -19,10 +19,6 @@ class Frame
     point
   end
 
-  def score_when_last_frame
-    @first_shot.score + @second_shot.score + @third_shot.score
-  end
-
   def calculate_when_strike(frames)
     if (frames[frames.index(self) + 1].first_shot.score == 10) && (frames.index(self) < 8)
       10 + frames[frames.index(self) + 2].first_shot.score
