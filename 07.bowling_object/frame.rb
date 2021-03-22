@@ -11,19 +11,5 @@ class Frame
 
   def score(frames)
     point = @first_shot.score + @second_shot.score + @third_shot.score
-    if @first_shot.score == 10
-      point += calculate_when_strike(frames)
-    elsif @first_shot.score + @second_shot.score == 10
-      point += frames[frames.index(self) + 1].first_shot.score
-    end
-    point
-  end
-
-  def calculate_when_strike(frames)
-    if (frames[frames.index(self) + 1].first_shot.score == 10) && (frames.index(self) < 8)
-      10 + frames[frames.index(self) + 2].first_shot.score
-    else
-      frames[frames.index(self) + 1].first_shot.score + frames[frames.index(self) + 1].second_shot.score
-    end
   end
 end
