@@ -7,4 +7,8 @@ require './07.bowling_object/argv'
 
 scores = Option.enqueue
 
-p Game.new(scores).score
+if ARGV[0].nil?
+  MiniTest::Assertions#skip
+else
+  p Game.new(scores).score
+end
