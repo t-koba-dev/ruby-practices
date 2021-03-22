@@ -2,6 +2,8 @@
 
 class Frame
   attr_reader :first_shot, :second_shot, :third_shot
+  THE_PREVIOUS_FRAME_FROM_THE_END = 9
+  MAXIMUM_NUMBER_OF_SHOTS_IN_THE_FRAME = 2
 
   def initialize(first_mark, second_mark, third_mark = nil)
     @first_shot = Shot.new(first_mark)
@@ -14,13 +16,13 @@ class Frame
     shots = []
     scores.each_with_index do |shot, index|
       number_of_shots = index + 1
-      if frames.size == 9
+      if frames.size == THE_PREVIOUS_FRAME_FROM_THE_END
         push_when_frame10(scores, number_of_shots, shots)
         frames.push(Frame.new(shots[0], shots[1], shots[2]))
         break
       else
         push_when_others(shot, shots, frames)
-        if shots.size == 2
+        if shots.size == MAXIMUM_NUMBER_OF_SHOTS_IN_THE_FRAME
           frames.push(Frame.new(shots[0], shots[1]))
           shots.clear
         end
