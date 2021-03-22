@@ -108,7 +108,7 @@ end
 
 class OptionCommand
   def self.output_when_have_not_l_option(file_list, regex)
-    result_list = push_file_that_matches_regular_expression(file_list, regex)
+    result_list = RegularExpression.push_file_that_matches_regular_expression(file_list, regex)
     file_name_word_max_length = result_list.max_by(&:size).size
     number = result_list.size.divmod(3)
     number[0] += 1 if number[1] != 0
@@ -122,7 +122,7 @@ class OptionCommand
   end
 
   def self.output_when_have_l_option(file_list, regex)
-    result_list = push_file_that_matches_regular_expression(file_list, regex)
+    result_list = RegularExpression.push_file_that_matches_regular_expression(file_list, regex)
     word_max_length = Calculation.calculate_word_max_length(result_list)
     puts "total #{Calculation.calculate_total(result_list)}"
     result_list.each do |f|
@@ -139,8 +139,10 @@ class OptionCommand
   end
 end
 
-def push_file_that_matches_regular_expression(file_list, regex)
-  file_list.select { |file| file.match?(regex) }
+class RegularExpression
+  def self.push_file_that_matches_regular_expression(file_list, regex)
+    file_list.select { |file| file.match?(regex) }
+  end
 end
 
 class Calculation
