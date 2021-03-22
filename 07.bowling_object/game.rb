@@ -17,7 +17,7 @@ class Game
       point += frames[frame].score
       if frames[frame].first_shot.score == 10
         point += self.calculate_when_strike(frames, frame)
-      elsif frames[frame].first_shot.score + frames[frame].second_shot.score == 10
+      elsif frames[frame].score == 10
         point += self.caluclate_when_spare(frames, frame)
       end
     end
@@ -72,6 +72,6 @@ class Game
   end
 
   def score_when_last_frame(frames)
-    frames.last.first_shot.score + frames.last.second_shot.score + frames.last.third_shot.score
+    frames.last.score
   end
 end
