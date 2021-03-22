@@ -14,7 +14,7 @@ class Game
     frames = push_shots_to_frames(scores)
     point = 0
     9.times do |frame|
-      point += frames[frame].score(frames)
+      point += frames[frame].score
       if frames[frame].first_shot.score == 10
         point += self.calculate_when_strike(frames, frame)
       elsif frames[frame].first_shot.score + frames[frame].second_shot.score == 10
