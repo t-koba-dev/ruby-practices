@@ -74,27 +74,29 @@ class Permission
   end
 end
 
-def push_file_to_list
-  file_list = []
-  regex = /.*\/+.*/
-  Find.find('.') do |f|
-    if f == '.'
+class List
+  def self.push_file_to_list
+    file_list = []
+    regex = /.*\/+.*/
+    Find.find('.') do |f|
+      if f == '.'
+        file_list << f
+        next
+      end
+      unless f.slice(2..-1).match?(regex)
+        file_list << f.slice(2..-1)
+      end
+    end
+    Find.find('..') do |f|
       file_list << f
-      next
+      Find.prune
     end
-    unless f.slice(2..-1).match?(regex)
-      file_list << f.slice(2..-1)
-    end
+    file_list.sort
   end
-  Find.find('..') do |f|
-    file_list << f
-    Find.prune
-  end
-  file_list.sort
 end
 
 def output
-  file_list = push_file_to_list
+  file_list = List.push_file_to_list
   file_list = file_list.reverse if ARGV[0]&.include?('r')
   regex = (ARGV[0]&.include?('a') ? // : /^[^.]/)
   if ARGV[0]&.include?('l')
