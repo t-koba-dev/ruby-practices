@@ -11,7 +11,7 @@ class File
   def initialize(file)
     stat = Pathname(file).stat
     @mode = stat.mode
-    @permission = display_permission(file)
+    @permission = Permission.display_permission(file)
     @nlink = stat.nlink
     @uid = Etc.getpwuid(stat.uid).name
     @gid = Etc.getgrgid(stat.gid).name
@@ -56,20 +56,22 @@ class File
   end
 end
 
-def display_permission(file)
-  Pathname(file).stat.mode.to_s(8).slice(-3..-1).chars.inject('') { |result, str| result + encode_permission(str) }
-end
-
-def encode_permission(str)
-  permission = '---'
-  str = str.to_i
-  if str / 4 == 1
-    permission[0] = 'r'
-    str -= 4
+class Permission
+  def self.display_permission(file)
+    Pathname(file).stat.mode.to_s(8).slice(-3..-1).chars.inject('') { |result, str| result + encode_permission(str) }
   end
-  permission[1] = 'w' if str >= 2
-  permission[2] = 'x' if str.odd?
-  permission
+
+  def self.encode_permission(str)
+    permission = '---'
+    str = str.to_i
+    if str / 4 == 1
+      permission[0] = 'r'
+      str -= 4
+    end
+    permission[1] = 'w' if str >= 2
+    permission[2] = 'x' if str.odd?
+    permission
+  end
 end
 
 def push_file_to_list
