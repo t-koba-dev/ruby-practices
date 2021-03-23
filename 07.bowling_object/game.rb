@@ -13,27 +13,27 @@ class Game
   def score
     frames = push_shots_to_frames(scores)
     point = 0
-    9.times do |frame|
-      point += frames[frame].score
-      if frames[frame].first_shot.score == 10
-        point += calculate_when_strike(frames, frame)
-      elsif frames[frame].score == 10
-        point += caluclate_when_spare(frames, frame)
+    9.times do |index|
+      point += frames[index].score
+      if frames[index].first_shot.score == 10
+        point += calculate_when_strike(frames, index)
+      elsif frames[index].score == 10
+        point += caluclate_when_spare(frames, index)
       end
     end
     point += score_when_last_frame(frames)
   end
 
-  def calculate_when_strike(frames, frame)
-    if (frames[frame + 1].first_shot.score == 10) && (frame < 8)
-      10 + frames[frame + 2].first_shot.score
+  def calculate_when_strike(frames, index)
+    if (frames[index + 1].first_shot.score == 10) && (index < 8)
+      10 + frames[index + 2].first_shot.score
     else
-      frames[frame + 1].first_shot.score + frames[frame + 1].second_shot.score
+      frames[index + 1].first_shot.score + frames[index + 1].second_shot.score
     end
   end
 
-  def caluclate_when_spare(frames, frame)
-    frames[frame + 1].first_shot.score
+  def caluclate_when_spare(frames, index)
+    frames[index + 1].first_shot.score
   end
 
   private
