@@ -41,8 +41,7 @@ class Game
   def push_shots_to_frames(scores)
     frames = []
     shots = []
-    scores.each_with_index do |shot, index|
-      number_of_shots = index + 1
+    scores.each.with_index(1) do |shot, number_of_shots|
       if frames.size == THE_PREVIOUS_FRAME_FROM_THE_END
         push_when_frame10(scores, number_of_shots, shots)
         frames.push(Frame.new(shots[0], shots[1], shots[2]))
