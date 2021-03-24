@@ -52,7 +52,7 @@ class File
 
   def self.output
     file_list = List.push_file_to_list
-    file_list = file_list.reverse if ARGV[0]&.include?('r')
+    file_list = OptionCommand.output_when_have_r_option(file_list) if ARGV[0]&.include?('r')
     regex = (ARGV[0]&.include?('a') ? // : /^[^.]/)
     if ARGV[0]&.include?('l')
       OptionCommand.output_when_have_l_option(file_list, regex)

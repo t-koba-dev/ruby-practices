@@ -31,4 +31,8 @@ class OptionCommand
       print file.output_name
     end
   end
+
+  def self.output_when_have_r_option(file_list)
+    file_list.reverse
+  end
 end
