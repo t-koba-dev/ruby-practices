@@ -11,7 +11,7 @@ class Game
   end
 
   def score
-    frames = push_shots_to_frames(scores)
+    frames = push_shots_to_frames
     point = 0
     9.times do |index|
       point += frames[index].score
@@ -38,12 +38,12 @@ class Game
 
   private
 
-  def push_shots_to_frames(scores)
+  def push_shots_to_frames
     frames = []
     shots = []
-    scores.each.with_index(1) do |shot, number_of_shots|
+    @scores.each.with_index(1) do |shot, number_of_shots|
       if frames.size == THE_PREVIOUS_FRAME_FROM_THE_END
-        push_when_frame10(scores, number_of_shots, shots)
+        push_when_frame10(number_of_shots, shots)
         frames.push(Frame.new(shots[0], shots[1], shots[2]))
         break
       else
@@ -58,8 +58,8 @@ class Game
     frames
   end
 
-  def push_when_frame10(scores, number_of_shots, shots)
-    scores[(number_of_shots - 1)..-1].each { |i| shots << Shot.new(i).score }
+  def push_when_frame10(number_of_shots, shots)
+    @scores[(number_of_shots - 1)..-1].each { |i| shots << Shot.new(i).score }
   end
 
   def push_when_others(shot, shots, frames)
