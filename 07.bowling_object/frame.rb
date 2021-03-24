@@ -2,6 +2,7 @@
 
 class Frame
   attr_reader :first_shot, :second_shot, :third_shot
+  STRIKE = 10
 
   def initialize(first_mark, second_mark, third_mark = nil)
     @first_shot = Shot.new(first_mark)
@@ -11,5 +12,9 @@ class Frame
 
   def score
     @first_shot.score + @second_shot.score + @third_shot.score
+  end
+
+  def is_strike
+    @first_shot.score == STRIKE
   end
 end

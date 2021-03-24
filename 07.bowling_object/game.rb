@@ -15,7 +15,7 @@ class Game
     point = 0
     9.times do |index|
       point += frames[index].score
-      if frames[index].first_shot.score == 10
+      if frames[index].is_strike
         point += calculate_when_strike(frames, index)
       elsif frames[index].score == 10
         point += caluclate_when_spare(frames, index)
@@ -25,7 +25,7 @@ class Game
   end
 
   def calculate_when_strike(frames, index)
-    if (frames[index + 1].first_shot.score == 10) && (index < 8)
+    if frames[index + 1].is_strike && (index < 8)
       10 + frames[index + 2].first_shot.score
     else
       frames[index + 1].first_shot.score + frames[index + 1].second_shot.score
