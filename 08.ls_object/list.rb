@@ -15,6 +15,6 @@ class List
       file_list << File.new(f)
       Find.prune
     end
-    file_list.sort_by! { |f| f.name }
+    file_list.sort_by!(&:name)
   end
 end
