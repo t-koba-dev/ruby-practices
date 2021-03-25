@@ -19,8 +19,7 @@ class OptionCommand
     result_list = RegularExpression.push_file_that_matches_regular_expression(file_list, regex)
     word_max_length = Calculation.calculate_word_max_length(result_list)
     puts "total #{Calculation.calculate_total(result_list)}"
-    result_list.each do |f|
-      file = File.new(f)
+    result_list.each do |file|
       print file.output_permission
       print file.output_nlink(word_max_length[:max_nlink])
       print file.output_uid(word_max_length[:max_uid_name])
