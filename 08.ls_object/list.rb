@@ -6,15 +6,15 @@ class List
     regex = %r{/.*/+.*/}
     Find.find('.') do |f|
       if f == '.'
-        file_list << f
+        file_list << File.new(f)
         next
       end
-      file_list << f.slice(2..-1) unless f.slice(2..-1).match?(regex)
+      file_list << File.new(f.slice(2..-1)) unless f.slice(2..-1).match?(regex)
     end
     Find.find('..') do |f|
-      file_list << f
+      file_list << File.new(f)
       Find.prune
     end
-    file_list.sort
+    file_list.sort_by! { |f| f.name }
   end
 end
