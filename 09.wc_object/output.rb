@@ -25,7 +25,11 @@ class Output
       print_number(file.bytes)
       print_last_text(file.name)
     end
-    total(file_list) if file_list.size >= 2
+    total(file_list) if should_show_total?(file_list)
+  end
+
+  def self.should_show_total?(file_list)
+    file_list.size >= 2
   end
 
   def self.push_file_to_list
