@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 class Output
+  def self.wc
+    $stdin.stat.mode.to_s(8)[0] == '1' ? with_stdin : without_stdin
+  end
+
+  private
+
   def self.with_stdin
     f = $stdin.readlines
     print f.size.to_s.rjust(8)
@@ -21,7 +27,7 @@ class Output
     end
     total(file_list) if file_list.size >= 2
   end
-  
+
   def self.push_file_to_list
     file_list = []
     Find.find('.') do |file|
@@ -37,15 +43,14 @@ class Output
     total.each_value do |value|
       print_number(value)
     end
-    print_last_text('total')
+    print_last_text
   end
 
-  private
   def self.print_number(text)
     print text.to_s.rjust(8)
   end
 
-  def self.print_last_text(text)
+  def self.print_last_text(text = 'total')
     print " #{text}\n"
   end
 end
