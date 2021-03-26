@@ -19,7 +19,7 @@ class Output
       print file.bytes.to_s.rjust(8)
       print " #{file.name}\n"
     end
-    # output_total(file_list) if file_list.size >= 2
+    output_total(file_list) if file_list.size >= 2
   end
   
   def self.push_file_to_list
@@ -33,14 +33,11 @@ class Output
   end
 
   def self.output_total(file_list)
-    total = Hash.new(0)
-    file_list.each do |f|
-      total[:lines] += IO.readlines(f).size
-      unless ARGV.include?('-l')
-        total[:words] += IO.read(f).split(' ').size
-        total[:size] += IO.read(f).size
-      end
-    end
+    total = {
+      lines: file_list.inject(0) { |result, file| result +file.lines },
+      words: file_list.inject(0) { |result, file| result +file.words },
+      bytes: file_list.inject(0) { |result, file| result +file.bytes }
+    }
     total.each_value do |value|
       print value.to_s.rjust(8)
     end
