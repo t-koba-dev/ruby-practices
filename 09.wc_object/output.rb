@@ -33,11 +33,7 @@ class Output
   end
 
   def self.output_total(file_list)
-    total = {
-      lines: file_list.inject(0) { |result, file| result +file.lines },
-      words: file_list.inject(0) { |result, file| result +file.words },
-      bytes: file_list.inject(0) { |result, file| result +file.bytes }
-    }
+    total = Calculation.total(file_list)
     total.each_value do |value|
       print value.to_s.rjust(8)
     end
