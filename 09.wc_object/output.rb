@@ -21,8 +21,10 @@ class Output
     file_list = push_file_to_list
     file_list.each do |file|
       print_number(file.lines)
-      print_number(file.words)
-      print_number(file.bytes)
+      unless ARGV.include?('-l')
+        print_number(file.words)
+        print_number(file.bytes)
+      end
       print_last_text(file.name)
     end
     total(file_list) if should_show_total?(file_list)
@@ -50,6 +52,7 @@ class Output
     total = Calculation.total(file_list)
     total.each_value do |value|
       print_number(value)
+      break if ARGV.include?('-l')
     end
     print_last_text
   end
