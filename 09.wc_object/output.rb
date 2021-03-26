@@ -5,8 +5,6 @@ class Output
     $stdin.stat.mode.to_s(8)[0] == '1' ? with_stdin : without_stdin
   end
 
-  private
-
   def self.with_stdin
     file = Stdin.new($stdin.readlines)
     print_number(file.lines)
@@ -16,7 +14,7 @@ class Output
     end
     print "\n"
   end
-  
+
   def self.without_stdin
     file_list = push_file_to_list
     file_list.each do |file|
@@ -36,16 +34,16 @@ class Output
 
   def self.push_file_to_list
     file_list = []
-    Find.find('.') do |file|
-      f = file.slice(2..-1)
-      file_list << File.new(f) if target?(f)
+    Find.find('.') do |f|
+      file = f.slice(2..-1)
+      file_list << File.new(file) if target?(file)
     end
     exit if file_list.empty?
     file_list
   end
 
-  def self.target?(f)
-    ARGV.include?(f)
+  def self.target?(file)
+    ARGV.include?(file)
   end
 
   def self.total(file_list)
