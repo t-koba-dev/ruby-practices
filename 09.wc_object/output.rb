@@ -8,11 +8,11 @@ class Output
   private
 
   def self.with_stdin
-    f = $stdin.readlines
-    print f.size.to_s.rjust(8)
+    file = Stdin.new($stdin.readlines)
+    print_number(file.lines)
     unless ARGV.include?('-l')
-      print f.join(' ').split(' ').size.to_s.rjust(8)
-      print f.join.size.to_s.rjust(8)
+      print_number(file.words)
+      print_number(file.bytes)
     end
     print "\n"
   end
