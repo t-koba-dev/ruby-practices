@@ -32,10 +32,14 @@ class Output
     file_list = []
     Find.find('.') do |file|
       f = file.slice(2..-1)
-      file_list << File.new(f) if ARGV.include?(f)
+      file_list << File.new(f) if target?(f)
     end
     exit if file_list.empty?
     file_list
+  end
+
+  def self.target?(f)
+    ARGV.include?(f)
   end
 
   def self.total(file_list)
