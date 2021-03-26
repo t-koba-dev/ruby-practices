@@ -14,10 +14,10 @@ class Output
   def self.without_stdin
     file_list = push_file_to_list
     file_list.each do |file|
-      print file.lines.to_s.rjust(8)
-      print file.words.to_s.rjust(8)
-      print file.bytes.to_s.rjust(8)
-      print " #{file.name}\n"
+      print_number(file.lines)
+      print_number(file.words)
+      print_number(file.bytes)
+      print_last_text(file.name)
     end
     total(file_list) if file_list.size >= 2
   end
@@ -35,8 +35,17 @@ class Output
   def self.total(file_list)
     total = Calculation.total(file_list)
     total.each_value do |value|
-      print value.to_s.rjust(8)
+      print_number(value)
     end
-    print " total\n"
+    print_last_text('total')
+  end
+
+  private
+  def self.print_number(text)
+    print text.to_s.rjust(8)
+  end
+
+  def self.print_last_text(text)
+    print " #{text}\n"
   end
 end
