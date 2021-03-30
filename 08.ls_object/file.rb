@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class File
+class Filedata
   attr_reader :mode, :permission, :nlink, :uid, :gid, :size, :month, :day, :hour, :minute, :name
 
   def initialize(file)

@@ -11,4 +11,4 @@ require './option_command'
 require './regular_expression'
 require './calculation'
 
-File.output
+Filedata.output
