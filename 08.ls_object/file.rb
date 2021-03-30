@@ -3,6 +3,17 @@
 class Filedata
   attr_reader :mode, :permission, :nlink, :uid, :gid, :size, :month, :day, :hour, :minute, :name
 
+  def self.output
+    file_list = List.push_file_to_list
+    file_list = OptionCommand.output_when_have_r_option(file_list) if ARGV[0]&.include?('r')
+    regex = (ARGV[0]&.include?('a') ? // : /^[^.]/)
+    if ARGV[0]&.include?('l')
+      OptionCommand.output_when_have_l_option(file_list, regex)
+    else
+      OptionCommand.output_when_have_not_l_option(file_list, regex)
+    end
+  end
+
   def initialize(file)
     stat = Pathname(file).stat
     @mode = stat.mode
@@ -50,14 +61,4 @@ class Filedata
     "#{@name}\n"
   end
 
-  def self.output
-    file_list = List.push_file_to_list
-    file_list = OptionCommand.output_when_have_r_option(file_list) if ARGV[0]&.include?('r')
-    regex = (ARGV[0]&.include?('a') ? // : /^[^.]/)
-    if ARGV[0]&.include?('l')
-      OptionCommand.output_when_have_l_option(file_list, regex)
-    else
-      OptionCommand.output_when_have_not_l_option(file_list, regex)
-    end
-  end
 end
