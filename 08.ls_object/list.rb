@@ -7,9 +7,9 @@ class List
     Find.find('.') do |f|
       if f == '.'
         file_list << Filedata.new(f)
-        next
+      else
+        file_list << Filedata.new(f.slice(2..-1)) unless f.slice(2..-1).match?(regex)
       end
-      file_list << Filedata.new(f.slice(2..-1)) unless f.slice(2..-1).match?(regex)
     end
     Find.find('..') do |f|
       file_list << Filedata.new(f)
