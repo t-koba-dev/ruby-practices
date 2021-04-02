@@ -9,7 +9,11 @@ class OptionCommand
     result_hash = result_list.group_by.with_index { |_file, i| i % number[0] }
     result_hash.each_value do |array|
       array.each do |file|
-        print file.name.ljust(file_name_word_max_length + 2)
+        if file.name == '.' || file.name == '..'
+          print file.name.ljust(file_name_word_max_length + 2)
+        else
+          print file.name.slice(2..-1).ljust(file_name_word_max_length + 2)
+        end
       end
       print "\n"
     end

@@ -6,7 +6,7 @@ class Filedata
   def self.output
     file_list = List.push_file_to_list
     file_list = OptionCommand.output_when_have_r_option(file_list) if ARGV[0]&.include?('r')
-    regex = (ARGV[0]&.include?('a') ? // : /^[^.]/)
+    regex = (ARGV[0]&.include?('a') ? // : /\.\/[^.]/)
     if ARGV[0]&.include?('l')
       OptionCommand.output_when_have_l_option(file_list, regex)
     else
@@ -58,7 +58,11 @@ class Filedata
   end
 
   def output_name
-    "#{@name}\n"
+    if @name == '.' || @name == '..'
+      "#{@name}\n"
+    else
+      "#{@name.slice(2..-1)}\n"
+    end
   end
 
 end
