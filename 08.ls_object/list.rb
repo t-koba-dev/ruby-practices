@@ -7,7 +7,7 @@ class List
       if f == '.'
         file_list << Filedata.new(f)
       else
-        file_list << Filedata.new(f.slice(2..-1))
+        file_list << Filedata.new(f)
       end
     end
     Find.find('..') do |f|
