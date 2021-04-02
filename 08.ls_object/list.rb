@@ -4,11 +4,7 @@ class List
   def self.push_file_to_list
     file_list = []
     Find.find('.') do |f|
-      if f == '.'
-        file_list << Filedata.new(f)
-      else
-        file_list << Filedata.new(f)
-      end
+      file_list << Filedata.new(f)
     end
     Find.find('..') do |f|
       file_list << Filedata.new(f)
