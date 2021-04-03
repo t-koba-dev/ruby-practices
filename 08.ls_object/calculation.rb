@@ -12,7 +12,7 @@ class Calculation
 
   def self.calculate_total(result_list)
     enqueue_file = []
-    result_list.each { |f| enqueue_file << f if /\.\/[^.]/.match?(f.name) }
+    result_list.each { |f| enqueue_file << f if /^[^\.]/.match?(f.name) }
     enqueue_file.inject(0) { |result, f| result + 8 * (f.size / 4096 + 1) }
   end
 end
