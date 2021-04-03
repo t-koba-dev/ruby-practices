@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class OptionCommand
-  def self.output_when_have_not_l_option(file_list, regex)
-    result_list = RegularExpression.push_file_that_matches_regular_expression(file_list, regex)
+  def self.output_when_have_not_l_option(file_list, regex_to_exclude_hidden_files)
+    result_list = RegularExpression.push_file_that_matches_regular_expression(file_list, regex_to_exclude_hidden_files)
     file_name_word_max_length = (result_list.max_by { |file| file.name.size }).name.size
     number = result_list.size.divmod(3)
     number[0] += 1 if number[1] != 0
@@ -15,8 +15,8 @@ class OptionCommand
     end
   end
 
-  def self.output_when_have_l_option(file_list, regex)
-    result_list = RegularExpression.push_file_that_matches_regular_expression(file_list, regex)
+  def self.output_when_have_l_option(file_list, regex_to_exclude_hidden_files)
+    result_list = RegularExpression.push_file_that_matches_regular_expression(file_list, regex_to_exclude_hidden_files)
     word_max_length = Calculation.calculate_word_max_length(result_list)
     puts "total #{Calculation.calculate_total(result_list)}"
     result_list.each do |file|
