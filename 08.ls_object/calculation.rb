@@ -11,7 +11,7 @@ class Calculation
   end
 
   def self.calculate_total(result_list)
-    regex_to_exclude_hidden_files = /^[^\.]/
+    regex_to_exclude_hidden_files = /\A[^\.]/
     enqueue_file = []
     result_list.each { |f| enqueue_file << f if f.name.match?(regex_to_exclude_hidden_files) }
     enqueue_file.inject(0) { |result, f| result + 8 * (f.size / 4096 + 1) }
