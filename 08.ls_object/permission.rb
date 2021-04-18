@@ -7,13 +7,19 @@ class Permission
 
   def self.encode_permission(str)
     permission = '---'
-    str = str.to_i
-    if str / 4 == 1
+    permission_number = str.to_i
+    if permission_number / 4 == 1
       permission[0] = 'r'
-      str -= 4
+      permission_number -= 4
     end
-    permission[1] = 'w' if str >= 2
-    permission[2] = 'x' if str.odd?
+
+    if permission_number >= 2
+      permission[1] = 'w'
+      permission_number -= 2
+    end
+
+    permission[2] = 'x' if permission_number == 1
+
     permission
   end
 end
