@@ -7,8 +7,8 @@ class OptionCommand
     quotient, remainder = result_list.size.divmod(3)
     quotient += 1 if remainder != 0
     result_hash = result_list.group_by.with_index { |_file, i| i % quotient }
-    result_hash.each_value do |array|
-      array.each do |file|
+    result_hash.each_value do |files|
+      files.each do |file|
         print file.name.ljust(file_name_word_max_length + 2)
       end
       print "\n"
