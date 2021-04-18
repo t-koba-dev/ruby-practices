@@ -21,10 +21,10 @@ class OptionCommand
     puts "total #{Calculation.calculate_total(result_list)}"
     result_list.each do |file|
       print file.output_permission
-      print file.output_nlink(word_max_length[:max_nlink])
-      print file.output_uid(word_max_length[:max_uid_name])
-      print file.output_gid(word_max_length[:max_gid_name])
-      print file.output_size(word_max_length[:max_size])
+      print file.output_nlink(word_max_length[:nlink])
+      print file.output_uid(word_max_length[:uid])
+      print file.output_gid(word_max_length[:gid])
+      print file.output_size(word_max_length[:size])
       print file.output_month_and_day
       print file.output_hour_and_minute
       print file.output_name

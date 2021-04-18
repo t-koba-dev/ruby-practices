@@ -6,7 +6,7 @@ class Filedata
   def self.output
     file_list = List.push_file_to_list
     file_list = OptionCommand.output_when_have_r_option(file_list) if ARGV[0]&.include?('r')
-    regex_to_exclude_hidden_files = (ARGV[0]&.include?('a') ? // : /\A[^\.]/)
+    regex_to_exclude_hidden_files = (ARGV[0]&.include?('a') ? // : /\A[^.]/)
     if ARGV[0]&.include?('l')
       OptionCommand.output_when_have_l_option(file_list, regex_to_exclude_hidden_files)
     else
@@ -26,11 +26,11 @@ class Filedata
     @day = stat.mtime.day
     @hour = stat.mtime.hour
     @minute = stat.mtime.min
-    if file == '.' || file == '..'
-      @name = file
-    else
-      @name = file.slice(2..-1)
-    end
+    @name = if ['.', '..'].include?(file)
+              file
+            else
+              file.slice(2..-1)
+            end
   end
 
   def output_permission
@@ -64,5 +64,4 @@ class Filedata
   def output_name
     "#{@name}\n"
   end
-
 end
