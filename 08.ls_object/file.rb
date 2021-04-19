@@ -136,7 +136,12 @@ class Filedata
   end
 
   def display_permission(file)
-    Pathname(file).stat.mode.to_s(8).slice(-3..-1).chars.inject('') { |result, str| result + encode_permission(str) }
+    permission = fetch_permission(file)
+    permission.chars.inject('') { |result, str| result + encode_permission(str) }
+  end
+
+  def fetch_permission(file)
+    Pathname(file).stat.mode.to_s(8).slice(-3..-1)
   end
 
   def encode_permission(str)
@@ -156,5 +161,4 @@ class Filedata
 
     permission
   end
-
 end
