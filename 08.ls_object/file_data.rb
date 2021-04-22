@@ -1,6 +1,6 @@
 # frozen_string_literal: false
 
-class Filedata
+class FileData
   attr_reader :mode, :permission, :nlink, :uid, :gid, :size, :month, :day, :hour, :minute, :name
 
   def self.output
@@ -30,8 +30,8 @@ class Filedata
 
   def self.output_when_have_l_option(file_list, regex_to_exclude_hidden_files)
     result_list = push_file_that_matches_regular_expression(file_list, regex_to_exclude_hidden_files)
-    word_max_length = Filedata.calculate_word_max_length(result_list)
-    puts "total #{Filedata.calculate_total(result_list)}"
+    word_max_length = FileData.calculate_word_max_length(result_list)
+    puts "total #{FileData.calculate_total(result_list)}"
     result_list.each do |file|
       print file.output_permission
       print file.output_nlink(word_max_length[:nlink])
@@ -51,10 +51,10 @@ class Filedata
   def self.push_file_to_list
     file_list = []
     Find.find('.') do |file_pass|
-      file_list << Filedata.new(file_pass)
+      file_list << FileData.new(file_pass)
     end
     Find.find('..') do |file_pass|
-      file_list << Filedata.new(file_pass)
+      file_list << FileData.new(file_pass)
       Find.prune
     end
     file_list.sort_by!(&:name)
