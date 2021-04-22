@@ -4,6 +4,6 @@ require 'find'
 require 'pathname'
 require 'etc'
 require 'date'
-require './file_data'
+require_relative 'file_data'
 
 FileData.output
