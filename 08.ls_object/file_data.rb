@@ -8,13 +8,13 @@ class FileData
     file_list = file_list.reverse if ARGV[0]&.include?('r')
     filtering_regex = (ARGV[0]&.include?('a') ? // : /\A[^.]/)
     if ARGV[0]&.include?('l')
-      output_when_have_l_option(file_list, filtering_regex)
+      output_with_l_option(file_list, filtering_regex)
     else
-      output_when_have_not_l_option(file_list, filtering_regex)
+      output_without_l_option(file_list, filtering_regex)
     end
   end
 
-  def self.output_when_have_not_l_option(file_list, filtering_regex)
+  def self.output_without_l_option(file_list, filtering_regex)
     result_list = push_file_that_matches_regular_expression(file_list, filtering_regex)
     file_name_word_max_length = (result_list.max_by { |file| file.name.size }).name.size
     quotient, remainder = result_list.size.divmod(3)
@@ -28,7 +28,7 @@ class FileData
     end
   end
 
-  def self.output_when_have_l_option(file_list, filtering_regex)
+  def self.output_with_l_option(file_list, filtering_regex)
     result_list = push_file_that_matches_regular_expression(file_list, filtering_regex)
     word_max_length = FileData.calculate_word_max_length(result_list)
     puts "total #{FileData.calculate_total(result_list)}"
