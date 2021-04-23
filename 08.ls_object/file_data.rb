@@ -6,20 +6,22 @@ class FileData
   def self.output
     file_list = build_file_list
     file_list = file_list.reverse if ARGV[0]&.include?('r')
-    filtering_regex = (ARGV[0]&.include?('a') ? // : /\A[^.]/)
+    unless ARGV[0]&.include?('a')
+      filtering_regex = /\A[^.]/
+      file_list = file_list.select { |file| file.name.match?(filtering_regex) }
+    end
     if ARGV[0]&.include?('l')
-      output_with_l_option(file_list, filtering_regex)
+      output_with_l_option(file_list)
     else
-      output_without_l_option(file_list, filtering_regex)
+      output_without_l_option(file_list)
     end
   end
 
-  def self.output_without_l_option(file_list, filtering_regex)
-    result_list = push_file_that_matches_regular_expression(file_list, filtering_regex)
-    file_name_word_max_length = (result_list.max_by { |file| file.name.size }).name.size
-    quotient, remainder = result_list.size.divmod(3)
+  def self.output_without_l_option(file_list)
+    file_name_word_max_length = (file_list.max_by { |file| file.name.size }).name.size
+    quotient, remainder = file_list.size.divmod(3)
     quotient += 1 if remainder != 0
-    result_hash = result_list.group_by.with_index { |_file, i| i % quotient }
+    result_hash = file_list.group_by.with_index { |_file, i| i % quotient }
     result_hash.each_value do |files|
       files.each do |file|
         print file.name.ljust(file_name_word_max_length + 2)
@@ -28,11 +30,10 @@ class FileData
     end
   end
 
-  def self.output_with_l_option(file_list, filtering_regex)
-    result_list = push_file_that_matches_regular_expression(file_list, filtering_regex)
-    word_max_length = FileData.calculate_word_max_length(result_list)
-    puts "total #{FileData.calculate_total(result_list)}"
-    result_list.each do |file|
+  def self.output_with_l_option(file_list)
+    word_max_length = FileData.calculate_word_max_length(file_list)
+    puts "total #{FileData.calculate_total(file_list)}"
+    file_list.each do |file|
       print file.output_permission
       print file.output_nlink(word_max_length[:nlink])
       print file.output_uid(word_max_length[:uid])
@@ -56,14 +57,10 @@ class FileData
     file_list.sort_by!(&:name)
   end
 
-  def self.push_file_that_matches_regular_expression(file_list, filtering_regex)
-    file_list.select { |file| file.name.match?(filtering_regex) }
-  end
-
-  def self.calculate_word_max_length(result_list)
+  def self.calculate_word_max_length(file_list)
     max_length = Hash.new(0)
 
-    result_list.each do |file|
+    file_list.each do |file|
       max_length[:nlink] = file.nlink.to_s.size if max_length[:nlink] < file.nlink.to_s.size
       max_length[:uid] = file.uid.size if max_length[:uid] < file.uid.size
       max_length[:gid] = file.gid.size if max_length[:gid] < file.gid.size
@@ -73,10 +70,10 @@ class FileData
     max_length
   end
 
-  def self.calculate_total(result_list)
+  def self.calculate_total(file_list)
     filtering_regex = /\A[^.]/
     enqueue_file = []
-    result_list.each { |f| enqueue_file << f if f.name.match?(filtering_regex) }
+    file_list.each { |f| enqueue_file << f if f.name.match?(filtering_regex) }
     enqueue_file.inject(0) { |result, f| result + File.stat(f.name).blocks }
   end
 
