@@ -6,10 +6,6 @@ class FileData
   def self.output
     file_list = build_file_list
     file_list = file_list.reverse if ARGV[0]&.include?('r')
-    unless ARGV[0]&.include?('a')
-      filtering_regex = /\A[^.]/
-      file_list = file_list.select { |file| file.name.match?(filtering_regex) }
-    end
     if ARGV[0]&.include?('l')
       output_with_l_option(file_list)
     else
@@ -46,15 +42,12 @@ class FileData
   end
 
   def self.build_file_list
-    file_list = []
-    Find.find('.') do |file_path|
-      file_list << FileData.new(file_path)
-    end
-    Find.find('..') do |file_path|
-      file_list << FileData.new(file_path)
-      Find.prune
-    end
-    file_list.sort_by!(&:name)
+    before_file_list = if ARGV[0]&.include?('a')
+                         Dir.glob('*', File::FNM_DOTMATCH)
+                       else
+                         Dir.glob('*')
+                       end
+    before_file_list.map { |file| FileData.new(file) }
   end
 
   def self.calculate_word_max_length(file_list)
@@ -89,11 +82,7 @@ class FileData
     @day = stat.mtime.day
     @hour = stat.mtime.hour
     @minute = stat.mtime.min
-    @name = if ['.', '..'].include?(file)
-              file
-            else
-              file.slice(2..-1)
-            end
+    @name = file
   end
 
   def output_permission
