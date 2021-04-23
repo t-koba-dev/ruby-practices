@@ -6,16 +6,16 @@ class FileData
   def self.output
     file_list = build_file_list
     file_list = file_list.reverse if ARGV[0]&.include?('r')
-    regex_to_exclude_hidden_files = (ARGV[0]&.include?('a') ? // : /\A[^.]/)
+    filtering_regex = (ARGV[0]&.include?('a') ? // : /\A[^.]/)
     if ARGV[0]&.include?('l')
-      output_when_have_l_option(file_list, regex_to_exclude_hidden_files)
+      output_when_have_l_option(file_list, filtering_regex)
     else
-      output_when_have_not_l_option(file_list, regex_to_exclude_hidden_files)
+      output_when_have_not_l_option(file_list, filtering_regex)
     end
   end
 
-  def self.output_when_have_not_l_option(file_list, regex_to_exclude_hidden_files)
-    result_list = push_file_that_matches_regular_expression(file_list, regex_to_exclude_hidden_files)
+  def self.output_when_have_not_l_option(file_list, filtering_regex)
+    result_list = push_file_that_matches_regular_expression(file_list, filtering_regex)
     file_name_word_max_length = (result_list.max_by { |file| file.name.size }).name.size
     quotient, remainder = result_list.size.divmod(3)
     quotient += 1 if remainder != 0
@@ -28,8 +28,8 @@ class FileData
     end
   end
 
-  def self.output_when_have_l_option(file_list, regex_to_exclude_hidden_files)
-    result_list = push_file_that_matches_regular_expression(file_list, regex_to_exclude_hidden_files)
+  def self.output_when_have_l_option(file_list, filtering_regex)
+    result_list = push_file_that_matches_regular_expression(file_list, filtering_regex)
     word_max_length = FileData.calculate_word_max_length(result_list)
     puts "total #{FileData.calculate_total(result_list)}"
     result_list.each do |file|
@@ -56,8 +56,8 @@ class FileData
     file_list.sort_by!(&:name)
   end
 
-  def self.push_file_that_matches_regular_expression(file_list, regex_to_exclude_hidden_files)
-    file_list.select { |file| file.name.match?(regex_to_exclude_hidden_files) }
+  def self.push_file_that_matches_regular_expression(file_list, filtering_regex)
+    file_list.select { |file| file.name.match?(filtering_regex) }
   end
 
   def self.calculate_word_max_length(result_list)
@@ -74,9 +74,9 @@ class FileData
   end
 
   def self.calculate_total(result_list)
-    regex_to_exclude_hidden_files = /\A[^.]/
+    filtering_regex = /\A[^.]/
     enqueue_file = []
-    result_list.each { |f| enqueue_file << f if f.name.match?(regex_to_exclude_hidden_files) }
+    result_list.each { |f| enqueue_file << f if f.name.match?(filtering_regex) }
     enqueue_file.inject(0) { |result, f| result + File.stat(f.name).blocks }
   end
 
