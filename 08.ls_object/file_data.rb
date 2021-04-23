@@ -5,7 +5,7 @@ class FileData
 
   def self.output
     file_list = build_file_list
-    file_list = output_when_have_r_option(file_list) if ARGV[0]&.include?('r')
+    file_list = file_list.reverse if ARGV[0]&.include?('r')
     regex_to_exclude_hidden_files = (ARGV[0]&.include?('a') ? // : /\A[^.]/)
     if ARGV[0]&.include?('l')
       output_when_have_l_option(file_list, regex_to_exclude_hidden_files)
@@ -42,10 +42,6 @@ class FileData
       print file.output_hour_and_minute
       print file.output_name
     end
-  end
-
-  def self.output_when_have_r_option(file_list)
-    file_list.reverse
   end
 
   def self.build_file_list
