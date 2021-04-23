@@ -4,7 +4,7 @@ class FileData
   attr_reader :mode, :permission, :nlink, :uid, :gid, :size, :month, :day, :hour, :minute, :name
 
   def self.output
-    file_list = push_file_to_list
+    file_list = build_file_list
     file_list = output_when_have_r_option(file_list) if ARGV[0]&.include?('r')
     regex_to_exclude_hidden_files = (ARGV[0]&.include?('a') ? // : /\A[^.]/)
     if ARGV[0]&.include?('l')
@@ -48,13 +48,13 @@ class FileData
     file_list.reverse
   end
 
-  def self.push_file_to_list
+  def self.build_file_list
     file_list = []
-    Find.find('.') do |file_pass|
-      file_list << FileData.new(file_pass)
+    Find.find('.') do |file_path|
+      file_list << FileData.new(file_path)
     end
-    Find.find('..') do |file_pass|
-      file_list << FileData.new(file_pass)
+    Find.find('..') do |file_path|
+      file_list << FileData.new(file_path)
       Find.prune
     end
     file_list.sort_by!(&:name)
