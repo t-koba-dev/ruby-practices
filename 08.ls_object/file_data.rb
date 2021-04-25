@@ -28,7 +28,7 @@ class FileData
 
   def self.output_with_l_option(file_list)
     word_max_length = FileData.calculate_word_max_length(file_list)
-    puts "total #{FileData.calculate_total(file_list)}"
+    puts "total #{file_list.sum { |f| File.stat(f.name).blocks }}"
     file_list.each do |file|
       print "#{file.mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{file.permission}  "
       print "#{file.nlink.to_s.rjust(word_max_length[:nlink])} "
@@ -61,13 +61,6 @@ class FileData
     end
 
     max_length
-  end
-
-  def self.calculate_total(file_list)
-    filtering_regex = /\A[^.]/
-    enqueue_file = []
-    file_list.each { |f| enqueue_file << f if f.name.match?(filtering_regex) }
-    enqueue_file.sum { |f| File.stat(f.name).blocks }
   end
 
   def initialize(file)
