@@ -14,7 +14,7 @@ class FileData
   end
 
   def self.output_without_l_option(file_list)
-    file_name_word_max_length = (file_list.max_by { |file| file.name.size }).name.size
+    file_name_word_max_length = file_list.max_by { |file| file.name.size }.name.size
     quotient, remainder = file_list.size.divmod(3)
     quotient += 1 if remainder != 0
     result_hash = file_list.group_by.with_index { |_file, i| i % quotient }
@@ -30,14 +30,14 @@ class FileData
     word_max_length = FileData.calculate_word_max_length(file_list)
     puts "total #{FileData.calculate_total(file_list)}"
     file_list.each do |file|
-      print file.output_permission
-      print file.output_nlink(word_max_length[:nlink])
-      print file.output_uid(word_max_length[:uid])
-      print file.output_gid(word_max_length[:gid])
-      print file.output_size(word_max_length[:size])
-      print file.output_month_and_day
-      print file.output_hour_and_minute
-      print file.output_name
+      print "#{file.mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{file.permission}  "
+      print "#{file.nlink.to_s.rjust(word_max_length[:nlink])} "
+      print "#{file.uid.to_s.rjust(word_max_length[:uid])}  "
+      print "#{file.gid.to_s.rjust(word_max_length[:gid])}  "
+      print "#{file.size.to_s.rjust(word_max_length[:size])} "
+      print "#{file.month.to_s.rjust(2, ' ')} #{file.day.to_s.rjust(2, ' ')} "
+      print "#{file.hour.to_s.rjust(2, '0')}:#{file.minute.to_s.rjust(2, '0')} "
+      print "#{file.name}\n"
     end
   end
 
@@ -83,38 +83,6 @@ class FileData
     @hour = stat.mtime.hour
     @minute = stat.mtime.min
     @name = file
-  end
-
-  def output_permission
-    "#{@mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{@permission}  "
-  end
-
-  def output_nlink(max_nlink)
-    "#{@nlink.to_s.rjust(max_nlink)} "
-  end
-
-  def output_uid(max_uid_name)
-    "#{@uid.to_s.rjust(max_uid_name)}  "
-  end
-
-  def output_gid(max_gid_name)
-    "#{@gid.to_s.rjust(max_gid_name)}  "
-  end
-
-  def output_size(max_size)
-    "#{@size.to_s.rjust(max_size)} "
-  end
-
-  def output_month_and_day
-    "#{@month.to_s.rjust(2, ' ')} #{@day.to_s.rjust(2, ' ')} "
-  end
-
-  def output_hour_and_minute
-    "#{@hour.to_s.rjust(2, '0')}:#{@minute.to_s.rjust(2, '0')} "
-  end
-
-  def output_name
-    "#{@name}\n"
   end
 
   def display_permission(file)
