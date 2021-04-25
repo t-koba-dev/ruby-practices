@@ -67,7 +67,7 @@ class FileData
     filtering_regex = /\A[^.]/
     enqueue_file = []
     file_list.each { |f| enqueue_file << f if f.name.match?(filtering_regex) }
-    enqueue_file.inject(0) { |result, f| result + File.stat(f.name).blocks }
+    enqueue_file.sum { |f| File.stat(f.name).blocks }
   end
 
   def initialize(file)
