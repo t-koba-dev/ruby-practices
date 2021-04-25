@@ -32,12 +32,12 @@ class FileData
     file_list.each do |file|
       print "#{file.mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{file.permission}  "
       print "#{file.nlink.to_s.rjust(word_max_length[:nlink])} "
-      print "#{file.uid.to_s.rjust(word_max_length[:uid])}  "
-      print "#{file.gid.to_s.rjust(word_max_length[:gid])}  "
+      print "#{file.uid.to_s.ljust(word_max_length[:uid])}  "
+      print "#{file.gid.to_s.ljust(word_max_length[:gid])}  "
       print "#{file.size.to_s.rjust(word_max_length[:size])} "
       print "#{file.month.to_s.rjust(2, ' ')} #{file.day.to_s.rjust(2, ' ')} "
       print "#{file.hour.to_s.rjust(2, '0')}:#{file.minute.to_s.rjust(2, '0')} "
-      print "#{file.name}\n"
+      puts file.name
     end
   end
 
@@ -54,10 +54,10 @@ class FileData
     max_length = Hash.new(0)
 
     file_list.each do |file|
-      max_length[:nlink] = file.nlink.to_s.size if max_length[:nlink] < file.nlink.to_s.size
-      max_length[:uid] = file.uid.size if max_length[:uid] < file.uid.size
-      max_length[:gid] = file.gid.size if max_length[:gid] < file.gid.size
-      max_length[:size] = file.size.to_s.size if max_length[:size] < file.size.to_s.size
+      max_length[:nlink] = [max_length[:nlink], file.nlink.to_s.size].max
+      max_length[:uid] = [max_length[:uid], file.uid.size].max
+      max_length[:gid] = [max_length[:gid], file.gid.size].max
+      max_length[:size] = [max_length[:size], file.size.to_s.size].max
     end
 
     max_length
