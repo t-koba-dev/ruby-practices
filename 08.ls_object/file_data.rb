@@ -3,10 +3,12 @@
 class FileData
   attr_reader :mode, :permission, :nlink, :uid, :gid, :size, :month, :day, :hour, :minute, :name
 
+  Option = ARGV[0]
+
   def self.output
     file_list = build_file_list
-    file_list = file_list.reverse if ARGV[0]&.include?('r')
-    if ARGV[0]&.include?('l')
+    file_list = file_list.reverse if Option&.include?('r')
+    if Option&.include?('l')
       output_with_l_option(file_list)
     else
       output_without_l_option(file_list)
@@ -42,7 +44,7 @@ class FileData
   end
 
   def self.build_file_list
-    before_file_list = if ARGV[0]&.include?('a')
+    before_file_list = if Option&.include?('a')
                          Dir.glob('*', File::FNM_DOTMATCH)
                        else
                          Dir.glob('*')
