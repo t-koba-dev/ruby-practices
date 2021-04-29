@@ -30,7 +30,7 @@ class FileData
     file_calc = Calculation.new(file_list)
     puts "total #{file_list.sum { |f| File.stat(f.name).blocks }}"
     file_list.each do |file|
-      print "#{file.mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{file.permission}  "
+      print "#{file.mode.to_s(8).slice(0) == '1' ? '-' : 'd'}#{file.permission.display}  "
       print "#{file.nlink.to_s.rjust(file_calc.max_length_nlink)} "
       print "#{file.uid.to_s.ljust(file_calc.max_length_uid)}  "
       print "#{file.gid.to_s.ljust(file_calc.max_length_gid)}  "
@@ -53,7 +53,7 @@ class FileData
   def initialize(file)
     stat = Pathname(file).stat
     @mode = stat.mode
-    @permission = display_permission(file)
+    @permission = Permission.new(file)
     @nlink = stat.nlink
     @uid = Etc.getpwuid(stat.uid).name
     @gid = Etc.getgrgid(stat.gid).name
@@ -63,32 +63,5 @@ class FileData
     @hour = stat.mtime.hour
     @minute = stat.mtime.min
     @name = file
-  end
-
-  def display_permission(file)
-    permission = fetch_permission(file)
-    permission.chars.inject('') { |result, str| result + encode_permission(str) }
-  end
-
-  def fetch_permission(file)
-    Pathname(file).stat.mode.to_s(8).slice(-3..-1)
-  end
-
-  def encode_permission(str)
-    permission = '---'
-    permission_number = str.to_i
-    if permission_number / 4 == 1
-      permission[0] = 'r'
-      permission_number -= 4
-    end
-
-    if permission_number >= 2
-      permission[1] = 'w'
-      permission_number -= 2
-    end
-
-    permission[2] = 'x' if permission_number == 1
-
-    permission
   end
 end
