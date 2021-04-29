@@ -44,12 +44,12 @@ class FileData
   end
 
   def self.build_file_list
-    before_file_list = if Option&.include?('a')
+    file_names = if Option&.include?('a')
                          Dir.glob('*', File::FNM_DOTMATCH)
                        else
                          Dir.glob('*')
                        end
-    before_file_list.map { |file| FileData.new(file) }
+    file_names.map { |file_name| FileData.new(file_name) }
   end
 
   def initialize(file)
