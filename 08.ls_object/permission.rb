@@ -14,20 +14,25 @@ class Permission
   private
 
   def encode_permission(str)
-    permission = '---'
     permission_number = str.to_i
-    if permission_number / 4 == 1
-      permission[0] = 'r'
-      permission_number -= 4
+
+    case permission_number
+    when 0
+      '---'
+    when 1
+      '--x'
+    when 2
+      '-w-'
+    when 3
+      '-wx'
+    when 4
+      'r--'
+    when 5
+      'r-x'
+    when 6
+      'rw-'
+    when 7
+      'rwx'
     end
-
-    if permission_number >= 2
-      permission[1] = 'w'
-      permission_number -= 2
-    end
-
-    permission[2] = 'x' if permission_number == 1
-
-    permission
   end
 end
