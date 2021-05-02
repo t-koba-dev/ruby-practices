@@ -3,8 +3,8 @@
 class Permission
   attr_reader :permission
 
-  def initialize(file)
-    @permission = Pathname(file).stat.mode.to_s(8).slice(-3..-1)
+  def initialize(file_name)
+    @permission = Pathname(file_name).stat.mode.to_s(8).slice(-3..-1)
   end
 
   def display
